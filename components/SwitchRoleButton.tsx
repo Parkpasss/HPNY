@@ -21,7 +21,7 @@ export default function SwitchRoleButton({ isSeller }: { isSeller: boolean }) {
       setLoading(true)
 
       if (isSeller) {
-        // 판매자에서 사용자로 전환
+        // 판매자에서 사용자로
         const response = await axios.post("/api/switch-to-user")
         if (response.status === 200) {
           alert(response.data.message || "사용자 전환이 완료되었습니다.")
