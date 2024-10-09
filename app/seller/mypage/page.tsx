@@ -14,7 +14,6 @@ export default function SellerMyPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  // 세션 동기화 훅 (항상 호출되도록)
   useEffect(() => {
     const syncSession = async () => {
       if (status === "authenticated") {
