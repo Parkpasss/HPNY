@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter, usePathname } from "next/navigation" // useRouter와 usePathname 함께 사용
+import { useRouter, usePathname } from "next/navigation"
 import { AiOutlineMenu, AiOutlineUser } from "react-icons/ai"
 import { GiNightSleep } from "react-icons/gi"
 import { useSession, signOut } from "next-auth/react"
