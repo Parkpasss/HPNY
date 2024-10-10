@@ -4,7 +4,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import Image from "next/image"
 import { Fragment } from "react"
 
-export default function ImageListModal({
+export default function ActivityImageListModal({
   isOpen,
   closeModal,
   data,
@@ -14,7 +14,7 @@ export default function ImageListModal({
   data: ActivityType
 }) {
   // 기본 이미지 설정
-  const defaultImage = "/images/default-room.jpg"
+  const defaultImage = "/images/default-activity.jpg"
 
   return (
     <>
@@ -80,7 +80,7 @@ export default function ImageListModal({
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-lime-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-lime-100 px-4 py-2 text-sm font-medium hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                       닫기

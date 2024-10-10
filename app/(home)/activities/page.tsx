@@ -12,7 +12,6 @@ import axios from "axios"
 import { ActivityType } from "@/interface"
 import { Loader, LoaderGrid } from "@/components/Loader"
 import useIntersectionObserver from "@/hooks/useIntersectionObserver"
-import { MapButton } from "@/components/Map"
 import { useRecoilValue } from "recoil"
 import { filterState } from "@/atom"
 import Slider from "react-slick"
@@ -227,7 +226,6 @@ export default function ActivityPage() {
           ))
         )}
       </GridLayout>
-      <MapButton onClick={() => router.push("/map")} />
 
       {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
       <div className="w-full touch-none h-10 mb-10" ref={ref} />

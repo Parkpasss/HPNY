@@ -34,26 +34,30 @@ export default function Navbar() {
       <div className="grow basis-0 hidden font-semibold text-lg sm:text-xl text-lime-500 cursor-pointer sm:flex sm:gap-2">
         <GiNightSleep className="text-4xl my-auto" />
         <Link href="/" className="my-auto block">
-          Comma
+          {status === "authenticated" && session?.user?.role === "SELLER"
+            ? "Comma Seller"
+            : "Comma"}
         </Link>
       </div>
 
       <div className="flex gap-4">
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="font-semibold my-auto hover:text-lime-600"
+        <Link
+          href="/"
+          className={`font-semibold my-auto hover:text-lime-600 ${
+            currentPath === "/" ? "text-lime-800" : ""
+          }`}
         >
           숙소
-        </button>
+        </Link>
         <div>|</div>
-        <button
-          type="button"
-          onClick={() => router.push("/activities")}
-          className="font-semibold my-auto hover:text-lime-600"
+        <Link
+          href="/activities"
+          className={`font-semibold my-auto hover:text-lime-600 ${
+            currentPath === "/activities" ? "text-lime-800" : ""
+          }`}
         >
           활동
-        </button>
+        </Link>
       </div>
 
       <div className="grow basis-0 hidden md:flex gap-4 align-middle justify-end relative">

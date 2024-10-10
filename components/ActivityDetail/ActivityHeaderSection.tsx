@@ -3,12 +3,10 @@
 import { useState } from "react"
 import { ActivityType } from "@/interface"
 
-import { CiShare1 } from "react-icons/ci"
-import { CiHeart } from "react-icons/ci"
 import { AiOutlineUnorderedList } from "react-icons/ai"
 import Image from "next/image"
 import { BLUR_DATA_URL } from "@/constants"
-import ActivityImageListModal from "./ActivityImageListModel"
+import ActivityImageListModal from "./ActivityImageListModal"
 import ShareButton from "./ShareButton"
 import LikeButton from "./LikeButton"
 

@@ -19,7 +19,14 @@ export async function GET(
         price: true,
         lat: true, // 위도 추가
         lng: true, // 경도 추가
-        // 필요한 다른 필드들도 포함하세요
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            desc: true,
+          },
+        },
       },
     })
 
