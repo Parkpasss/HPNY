@@ -21,11 +21,13 @@ export default function CommentListModal({
   closeModal,
   activityId,
   roomId,
+  selectedComment,
 }: {
   isOpen: boolean
   closeModal: () => void
   activityId: number
   roomId: number
+  selectedComment: CommentType | null
 }) {
   const ref = useRef<HTMLDivElement | null>(null)
   const pageRef = useIntersectionObserver(ref, {
@@ -36,16 +38,9 @@ export default function CommentListModal({
 
   const fetchComments = async ({ pageParam = 1 }) => {
     let url = `/api/comments?limit=6&page=${pageParam}`
-
-    if (roomId) {
-      url += `&roomId=${roomId}`
-    }
-    if (activityId) {
-      url += `&activityId=${activityId}`
-    }
-
+    if (roomId) url += `&roomId=${roomId}`
+    if (activityId) url += `&activityId=${activityId}`
     const { data } = await axios(url)
-
     return data as CommentApiType
   }
 
@@ -60,18 +55,14 @@ export default function CommentListModal({
     {
       getNextPageParam: (lastPage: any) =>
         lastPage?.data?.length > 0 ? lastPage.page + 1 : undefined,
+      enabled: !selectedComment,
     },
   )
 
   React.useEffect(() => {
-    let timerId: NodeJS.Timeout | undefined
     if (isPageEnd && hasNextPage) {
-      timerId = setTimeout(() => {
-        fetchNextPage()
-      }, 500)
+      fetchNextPage()
     }
-
-    return () => clearTimeout(timerId)
   }, [isPageEnd, hasNextPage, fetchNextPage])
 
   return (
@@ -112,44 +103,80 @@ export default function CommentListModal({
                   as="h3"
                   className="text-xl md:text-2xl font-medium leading-6 text-gray-900"
                 >
-                  후기 전체 보기
+                  {selectedComment ? "후기 상세 보기" : "후기 전체 보기"}
                 </Dialog.Title>
                 <div className="mt-8 flex flex-col gap-8 mx-auto max-w-lg mb-10">
-                  {comments?.pages?.map((page, index) => (
-                    <React.Fragment key={index}>
-                      {page.data.map((comment: CommentType) => (
-                        <div key={comment?.id} className="flex flex-col gap-2">
-                          <div className="flex gap-2 items-center">
-                            <img
-                              src={comment?.user?.image || "/images/user.png"}
-                              alt="profile img"
-                              width={50}
-                              height={50}
-                              className="rounded-full"
-                            />
-                            <div>
-                              <h1 className="font-semibold">
-                                {comment?.user?.name || "-"}
-                              </h1>
-                              <div className="text-gray-500 text-xs">
-                                {dayjs(comment?.createdAt)
-                                  .tz(dayjs.tz.guess())
-                                  .format("YYYY-MM-DD HH:mm:ss")}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="max-w-lg text-gray-600">
-                            {comment?.body}
+                  {selectedComment ? (
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-2 items-center">
+                        <img
+                          src={
+                            selectedComment.user?.image || "/images/user.png"
+                          }
+                          alt="profile img"
+                          width={50}
+                          height={50}
+                          className="rounded-full"
+                        />
+                        <div>
+                          <h1 className="font-semibold">
+                            {selectedComment.user?.name || "-"}
+                          </h1>
+                          <div className="text-gray-500 text-xs">
+                            {dayjs(selectedComment.createdAt)
+                              .tz(dayjs.tz.guess())
+                              .format("YYYY-MM-DD HH:mm:ss")}
                           </div>
                         </div>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                  {(hasNextPage || isFetching) && <Loader className="mt-8" />}
-                  <div
-                    ref={ref}
-                    className="w-full h-10 mb-10 z-10 touch-none"
-                  />
+                      </div>
+                      <div className="max-w-lg text-gray-600">
+                        {selectedComment.body}
+                      </div>
+                    </div>
+                  ) : (
+                    comments?.pages?.map((page, index) => (
+                      <React.Fragment key={index}>
+                        {page.data.map((comment: CommentType) => (
+                          <div
+                            key={comment?.id}
+                            className="flex flex-col gap-2"
+                          >
+                            <div className="flex gap-2 items-center">
+                              <img
+                                src={comment?.user?.image || "/images/user.png"}
+                                alt="profile img"
+                                width={50}
+                                height={50}
+                                className="rounded-full"
+                              />
+                              <div>
+                                <h1 className="font-semibold">
+                                  {comment?.user?.name || "-"}
+                                </h1>
+                                <div className="text-gray-500 text-xs">
+                                  {dayjs(comment?.createdAt)
+                                    .tz(dayjs.tz.guess())
+                                    .format("YYYY-MM-DD HH:mm:ss")}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="max-w-lg text-gray-600">
+                              {comment?.body}
+                            </div>
+                          </div>
+                        ))}
+                      </React.Fragment>
+                    ))
+                  )}
+                  {!selectedComment && (hasNextPage || isFetching) && (
+                    <Loader className="mt-8" />
+                  )}
+                  {!selectedComment && (
+                    <div
+                      ref={ref}
+                      className="w-full h-10 mb-10 z-10 touch-none"
+                    />
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

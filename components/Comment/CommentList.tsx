@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { BiChevronRight } from "react-icons/bi"
 import CommentListModal from "./CommentListModal"
-import { CommentApiType } from "@/interface"
+import { CommentApiType, CommentType } from "@/interface"
 import { Loader } from "../Loader"
 import dayjs from "dayjs"
 import "dayjs/locale/ko"
@@ -25,12 +25,17 @@ export default function CommentList({
   roomId: number
 }) {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [selectedComment, setSelectedComment] = useState<CommentType | null>(
+    null,
+  )
 
   const closeModal = () => {
     setIsOpenModal(false)
+    setSelectedComment(null)
   }
 
-  const openModal = () => {
+  const openModal = (comment: CommentType | null) => {
+    setSelectedComment(comment)
     setIsOpenModal(true)
   }
 
@@ -64,14 +69,24 @@ export default function CommentList({
                   </div>
                 </div>
               </div>
-              <div className="max-w-md text-gray-600">{comment?.body}</div>
-              <button
-                type="button"
-                onClick={openModal}
-                className="underline font-semibold flex gap-1 items-center justify-start"
+              <div
+                className={`max-w-md text-gray-600 ${
+                  comment?.body && comment.body.length > 100
+                    ? "line-clamp-3 overflow-hidden text-ellipsis"
+                    : ""
+                }`}
               >
-                더보기 <BiChevronRight className="text-xl" />
-              </button>
+                {comment?.body}
+              </div>
+              {comment?.body && comment.body.length > 100 && (
+                <button
+                  type="button"
+                  onClick={() => openModal(comment)}
+                  className="underline font-semibold flex gap-1 items-center justify-start"
+                >
+                  더보기 <BiChevronRight className="text-xl" />
+                </button>
+              )}
             </div>
           ))
         )}
@@ -80,7 +95,7 @@ export default function CommentList({
       <div className="mt-8 mb-20">
         <button
           type="button"
-          onClick={openModal}
+          onClick={() => openModal(null)}
           className="border border-gray-700 font-semibold rounded-lg px-6 py-4 flex items-center gap-4 hover:bg-black/5"
         >
           후기 {comments?.totalCount || 0}개 모두 보기
@@ -93,6 +108,7 @@ export default function CommentList({
           closeModal={closeModal}
           roomId={roomId}
           activityId={activityId}
+          selectedComment={selectedComment}
         />
       )}
     </>
