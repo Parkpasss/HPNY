@@ -20,7 +20,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/users/signup" className="hover:underline">
+                <Link href="/users/signin" className="hover:underline">
                   회원가입
                 </Link>
               </li>
